@@ -6,7 +6,6 @@
 package singularity
 
 import (
-	"github.com/sylabs/singularity/internal/pkg/runtime/engines/config/oci"
 	"github.com/sylabs/singularity/pkg/image"
 )
 
@@ -91,17 +90,6 @@ type JSONConfig struct {
 	TargetUID     int           `json:"targetUID,omitempty"`
 	TargetGID     []int         `json:"targetGID,omitempty"`
 	LibrariesPath []string      `json:"librariesPath,omitempty"`
-}
-
-// NewConfig returns singularity.EngineConfig with a parsed FileConfig
-func NewConfig() *EngineConfig {
-	ret := &EngineConfig{
-		JSON:      &JSONConfig{},
-		OciConfig: &oci.Config{},
-		File:      &FileConfig{},
-	}
-
-	return ret
 }
 
 // SetImage sets the container image path to be used by EngineConfig.JSON.
