@@ -29,6 +29,7 @@ var (
 	VMRAM           string
 	VMCPU           string
 	ContainLibsPath []string
+	FuseCmd         []string
 
 	IsBoot          bool
 	IsFakeroot      bool
@@ -257,6 +258,17 @@ var actionContainLibsFlag = cmdline.Flag{
 	Name:         "containlibs",
 	Hidden:       true,
 	EnvKeys:      []string{"CONTAINLIBS"},
+	ExcludedOS:   []string{cmdline.Darwin},
+}
+
+// --fusecmd
+var actionFuseCmdFlag = cmdline.Flag{
+	ID:           "actionFuseCmdFlag",
+	Value:        &FuseCmd,
+	DefaultValue: []string{},
+	Name:         "fusecmd",
+	Usage:        "Command to run inside the container to implement a libfuse3-based filesystem. The last parameter is a mountpoint that will be pre-mounted and replaced with a /dev/fd/NN path to the fuse file descriptor.",
+	EnvKeys:      []string{"FUSECMD"},
 	ExcludedOS:   []string{cmdline.Darwin},
 }
 
@@ -621,6 +633,7 @@ func init() {
 	cmdManager.RegisterFlagForCmd(&actionVMRAMFlag, actionsCmd...)
 	cmdManager.RegisterFlagForCmd(&actionVMCPUFlag, actionsCmd...)
 	cmdManager.RegisterFlagForCmd(&actionContainLibsFlag, actionsInstanceCmd...)
+	cmdManager.RegisterFlagForCmd(&actionFuseCmdFlag, actionsInstanceCmd...)
 	cmdManager.RegisterFlagForCmd(&actionDockerUsernameFlag, actionsInstanceCmd...)
 	cmdManager.RegisterFlagForCmd(&actionDockerPasswordFlag, actionsInstanceCmd...)
 	cmdManager.RegisterFlagForCmd(&actionTmpDirFlag, actionsCmd...)
